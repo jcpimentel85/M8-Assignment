@@ -310,19 +310,17 @@ console.log("Random number:", ranNum)
 console.log("******************")
 console.log("Step 17 - Largest Number in Array")
 
-let largNumbersArray = [2,4,6,23,56,13,66,823,11,57]
-let largestNum = 1
+let largNumbersArray = [2,4,96,23,56,13,66,823,11,57]
 
 function evaluateNumber(numberStp17){
-        if (largestNum < numberStp17){
-            // console.log("Largest number in function 1-1:", numberStp17)
-            largestNum = numberStp17
-    //    console.log("Largest number in function 1-2:", largestNum)
-    //    console.log("Largest number in function 1-3:", numberStp17)
+   let largestNum = 66
+    for ( i = 1 ; i < largNumbersArray.length; i++){
+    if (largNumbersArray[i] > largestNum){
+        largestNum = largNumbersArray[i]
+        } 
     }
-    // console.log("Largest number in function2:", largestNum)
-} 
-console.log (evaluateNumber(largNumbersArray))    
+    return largestNum
+}
 let largestNumber = evaluateNumber(largNumbersArray)
 console.log("Largest number:", largestNumber)
 
