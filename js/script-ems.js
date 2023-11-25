@@ -10,18 +10,22 @@ let addingEmpArray = [
 // GET DOM ELEMENTS
 const employeeData = document.getElementById('empTable');
 let empCount1
+let newEmpArray =[]
+let parseInitEmpArray
 // CHECK TO SEE IF STORAGE OBJECT EXISTS WHEN THE PAGE LOADS
 // IF DOES, RETURN STORAGE OBJECT INTO ARRAY INSTEAD OF POPULATED ARRAY
-let parseInitEmpArray = JSON.parse(localStorage.getItem('addingEmpArray')) ;
-//let parseInitEmpArray = JSON.parse(localStorage.getItem('parseInitEmpArray')) ;
-console.log(parseInitEmpArray)
-if (parseInitEmpArray == null) {
+parseInitEmpArray = JSON.parse(localStorage.getItem('localstorageArray')) ;
+console.log("parseInitEmpArray Results",parseInitEmpArray)
+if (parseInitEmpArray == null || parseInitEmpArray == 0) {
     console.log("Storage Object is Empty")
-    initialEmployeeGrid(addingEmpArray); 
+    initialEmployeeGrid(addingEmpArray);
+    newEmpArray = addingEmpArray
+    console.log('show newEmpArray', newEmpArray)
     }
     else {
         console.log("Storage Object with existing data")
-        initialEmployeeGrid(parseInitEmpArray);    
+        initialEmployeeGrid(parseInitEmpArray);
+        newEmpArray = parseInitEmpArray    
     }
 
 // BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
@@ -38,8 +42,8 @@ function initialEmployeeGrid(employees) {
      `;
      employeeData.appendChild(row);
    });
+   
 }
-
 
 // ADD EMPLOYEE
 let form = document.getElementById('addForm')
@@ -55,18 +59,15 @@ form.addEventListener('submit', (e) => {
     let email = document.getElementById('email').value
     let department = document.getElementById('department').value
     // ADD THE NEW EMPLOYEE TO A NEW ARRAY OBJECT
-    addingEmpArray.push([id, name, extension, email, department])
-    //newAddingEmpArray.push([id, name, extension, email, department])
-    console.log("Show AddinEmp Array", addingEmpArray)
-    localStorage.setItem ('addingEmpArray', JSON.stringify(addingEmpArray))
-    let parseAddingEmpArray = JSON.parse(localStorage.getItem('addingEmpArray')) ;
-    console.log("parseAddingEmp Array", parseAddingEmpArray)
+    newEmpArray.push([id, name, extension, email, department])
+    console.log("Show newEmpArray", newEmpArray)
+    localStorage.setItem ('localstorageArray', JSON.stringify(newEmpArray))
+    //let AddingEmpArray = JSON.parse(localStorage.getItem('newAddingEmpArray')) ;
+    parseInitEmpArray = JSON.parse(localStorage.getItem('localstorageArray')) ;
+    console.log("parseInitEmpArray Results",parseInitEmpArray)
     // PUSH THE NEW ARRAY TO THE *EXISTING* EMPLOYEES ARRAY
-    //let newEmpArray = newaddingEmpArray.concat(parseAddingEmpArray)
-    //console.log("Show Concat Array", newEmpArray)
     // BUILD THE GRID
-    //buildGrid(newEmpArray)
-    buildGrid(parseAddingEmpArray)
+    buildGrid(parseInitEmpArray)
     // RESET THE FORM
     //form.reset()
     // SET FOCUS BACK TO THE ID TEXT BOX
@@ -76,13 +77,32 @@ form.addEventListener('submit', (e) => {
 // DELETE EMPLOYEE
 empTable.addEventListener('click', (e) => {
     // CONFIRM THE DELETE
-
-        // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
-
-        // REMOVE EMPLOYEE FROM ARRAY
-
-        // BUILD THE GRID
-
+    //let parseInitEmpArray = JSON.parse(localStorage.getItem('addingEmpArray')) ;
+    console.log("Show parseInitEmp Array from delete", parseInitEmpArray)
+    // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
+    let clickedRow = e.target.closest('tr'); // Get the closest 'tr' element
+     if (clickedRow) {
+    let rowIndex = clickedRow.rowIndex;
+    //let parseInitEmpArray = JSON.parse(localStorage.getItem('addingEmpArray')) ;
+    console.log("Show parseInitEmp Array before delete", parseInitEmpArray)
+    console.log('Clicked row index:', rowIndex);
+    console.log("Show AddinEmp Array", addingEmpArray)
+    // REMOVE EMPLOYEE FROM ARRAY
+    // parseInitEmpArray.splice(rowIndex - 1,1,)
+    // console.log("Show parseInitEmp Array", parseInitEmpArray)
+    // localStorage.setItem ('localstorageArray', JSON.stringify(parseInitEmpArray))
+    // parseInitEmpArray = JSON.parse(localStorage.getItem('localstorageArray')) ;
+    // console.log("parseInitEmpArray Results",parseInitEmpArray)
+    parseInitEmpArray.splice(rowIndex - 1,1,)
+    console.log("Show parseInitEmp Array", newEmpArray)
+    localStorage.setItem ('localstorageArray', JSON.stringify(parseInitEmpArray))
+    parseInitEmpArray = JSON.parse(localStorage.getItem('localstorageArray')) ;
+    console.log("parseInitEmpArray Results",parseInitEmpArray)
+    
+    
+    // BUILD THE GRID
+    buildGrid(parseInitEmpArray)
+     }
 });
 
 // BUILD THE EMPLOYEES GRID
@@ -109,7 +129,7 @@ function buildGrid(employees) {
     });
     // UPDATE EMPLOYEE COUNT
     empCount1 = document.getElementById("empTable").rows.length - 1
-    console.log(" Emp Count", empCount1)
+    //console.log(" Emp Count", empCount1)
     empCount.innerHTML = `(${empCount1.toFixed()})`
     // STORE THE ARRAY IN STORAGE
 };
